@@ -1,0 +1,111 @@
+USE [Reporte de Nomina GS]
+GO
+/****** Object:  Table [dbo].[Control de acceso]    Script Date: 20/12/2020 9:18:02 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Control de acceso](
+	[Controlaccesoid] [int] NOT NULL,
+	[Nombre] [varchar](50) NULL,
+	[codigo] [varchar](20) NOT NULL,
+	[turno] [varchar](50) NULL,
+	[entrada] [varchar](10) NULL,
+	[salida] [varchar](10) NULL,
+	[area] [varchar](5) NULL,
+ CONSTRAINT [PK_Control de acceso] PRIMARY KEY CLUSTERED 
+(
+	[codigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Departamento]    Script Date: 20/12/2020 9:18:03 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Departamento](
+	[Areadepartamentoid] [int] NOT NULL,
+	[area] [varchar](5) NOT NULL,
+	[codigo] [varchar](20) NULL,
+	[nombre] [varchar](50) NULL,
+ CONSTRAINT [PK_Departamento] PRIMARY KEY CLUSTERED 
+(
+	[area] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Empleado]    Script Date: 20/12/2020 9:18:03 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Empleado](
+	[Empleadoid] [int] NOT NULL,
+	[Nombre] [varchar](50) NULL,
+	[Codigo] [varchar](20) NULL,
+ CONSTRAINT [PK_Empleado] PRIMARY KEY CLUSTERED 
+(
+	[Empleadoid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Horario]    Script Date: 20/12/2020 9:18:03 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Horario](
+	[Horarioid] [int] NOT NULL,
+	[horaentrada] [varchar](20) NULL,
+	[horasalida] [varchar](20) NULL,
+	[turno] [varchar](50) NOT NULL,
+	[Empleadoid] [varchar](50) NULL,
+ CONSTRAINT [PK_Horario] PRIMARY KEY CLUSTERED 
+(
+	[turno] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Horas pagadas]    Script Date: 20/12/2020 9:18:03 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Horas pagadas](
+	[Horaspagadasid] [int] NOT NULL,
+	[nombre] [varchar](50) NOT NULL,
+	[horaentrada] [varchar](20) NULL,
+	[horasalida] [varchar](20) NULL,
+	[pagadas] [varchar](5) NULL,
+ CONSTRAINT [PK_Horas pagadas] PRIMARY KEY CLUSTERED 
+(
+	[nombre] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Control de acceso]  WITH CHECK ADD  CONSTRAINT [FK_Control de acceso_Horario] FOREIGN KEY([turno])
+REFERENCES [dbo].[Horario] ([turno])
+GO
+ALTER TABLE [dbo].[Control de acceso] CHECK CONSTRAINT [FK_Control de acceso_Horario]
+GO
+ALTER TABLE [dbo].[Departamento]  WITH CHECK ADD  CONSTRAINT [FK_Departamento_Control de acceso] FOREIGN KEY([codigo])
+REFERENCES [dbo].[Control de acceso] ([codigo])
+GO
+ALTER TABLE [dbo].[Departamento] CHECK CONSTRAINT [FK_Departamento_Control de acceso]
+GO
+ALTER TABLE [dbo].[Departamento]  WITH CHECK ADD  CONSTRAINT [FK_Departamento_Horas pagadas] FOREIGN KEY([nombre])
+REFERENCES [dbo].[Horas pagadas] ([nombre])
+GO
+ALTER TABLE [dbo].[Departamento] CHECK CONSTRAINT [FK_Departamento_Horas pagadas]
+GO
+ALTER TABLE [dbo].[Empleado]  WITH CHECK ADD  CONSTRAINT [FK_Empleado_Horas pagadas] FOREIGN KEY([Nombre])
+REFERENCES [dbo].[Horas pagadas] ([nombre])
+GO
+ALTER TABLE [dbo].[Empleado] CHECK CONSTRAINT [FK_Empleado_Horas pagadas]
+GO
+ALTER TABLE [dbo].[Horario]  WITH CHECK ADD  CONSTRAINT [FK_Horario_Empleado] FOREIGN KEY([Horarioid])
+REFERENCES [dbo].[Empleado] ([Empleadoid])
+GO
+ALTER TABLE [dbo].[Horario] CHECK CONSTRAINT [FK_Horario_Empleado]
+GO
